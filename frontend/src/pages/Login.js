@@ -19,6 +19,10 @@ function Login() {
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Login failed. Please try again.");
+        return;
+      }
       localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("refreshToken", data.refreshToken);
       const decoded = jwtDecode(data.accessToken);
@@ -33,11 +37,16 @@ function Login() {
   const register = async () => {
     setLoading(true);
     try {
-      await fetch("http://localhost:5000/api/register", {
+      const res = await fetch("http://localhost:5000/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Registration failed. Please try again.");
+        return;
+      }
       alert("Registered! You can now login.");
       setIsLogin(true);
       setEmail("");
