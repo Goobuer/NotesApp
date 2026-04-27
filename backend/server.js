@@ -29,10 +29,15 @@ users.forEach((user) => {
 
 // Middleware to verify JWT
 const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization;
+  let token = req.headers.authorization;
 
   if (!token) {
     return res.status(401).json({ error: "No token provided" });
+  }
+
+  // Remove 'Bearer ' prefix if present
+  if (token.startsWith("Bearer ")) {
+    token = token.slice(7);
   }
 
   try {
